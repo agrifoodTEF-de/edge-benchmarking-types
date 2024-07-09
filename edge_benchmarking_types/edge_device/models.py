@@ -184,4 +184,4 @@ class DeviceInfo(BaseModel):
 
 class Device(BaseModel):
     header: DeviceHeader
-    info: DeviceInfo
+    info: DeviceInfo = DeviceInfo()

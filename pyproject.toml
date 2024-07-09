@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "edge-benchmarking-types"
+version = "0.1.0"
+description = "Type definitions for AgrifoodTEF's Edge Benchmarking Service."
+authors = ["Andreas Schliebitz <a.schliebitz@hs-osnabrueck.de>"]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [{ include = "edge_benchmarking_types" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "2.8.2"
+psutil = "6.0.0"
+py-cpuinfo = "9.0.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "24.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

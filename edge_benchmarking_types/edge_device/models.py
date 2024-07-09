@@ -3,7 +3,7 @@ import cpuinfo
 import platform
 
 from datetime import datetime
-from pydantic import BaseModel, Field, field_serializer
+from pydantic import BaseModel, field_serializer
 from typing import Optional, List, Dict, Any, ClassVar, Tuple
 from edge_benchmarking_types.edge_device.enums import JobStatus
 

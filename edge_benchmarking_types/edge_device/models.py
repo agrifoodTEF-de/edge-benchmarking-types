@@ -15,6 +15,10 @@ class BenchmarkJob(BaseModel):
     status: JobStatus
 
 
+class InferenceServerStatus(BaseModel):
+    ready: bool
+
+
 class PlatformInfo(BaseModel):
     system: str = platform.system()
     architecture: Tuple[str, str] = platform.architecture()

@@ -143,7 +143,7 @@ class SensorInfo(BaseModel):
 class GPUStatus(BaseModel):
     railgate: bool
     tpc_pg_mask: bool
-    three_d_scaling: bool = Field(..., alias="3d_scaling")
+    three_d_scaling: bool
     load: float
 
 

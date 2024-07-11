@@ -144,7 +144,7 @@ class DeviceHeader(BaseModel):
     hostname: str
     heartbeat_interval: int
     timestamp: datetime = Field(default_factory=datetime.now)
-    online: Optional[bool] = Field(default=True)
+    online: bool = Field(default=True)
 
     @field_serializer("timestamp")
     def serialize_timestamp(self, timestamp: datetime) -> str:

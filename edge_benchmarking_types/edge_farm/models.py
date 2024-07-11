@@ -1,5 +1,5 @@
 from typing import Optional, List
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict
 from edge_benchmarking_types.edge_device.enums import InferenceServerType
 
 
@@ -15,18 +15,18 @@ class BenchmarkData(BaseModel):
 
 
 class EdgeDeviceConfig(BaseModel):
-    protocol: str = "http"
+    protocol: str = Field(default="http")
     host: str
 
 
 class InferenceClientConfig(BaseModel):
-    protocol: str = "http"
+    protocol: str = Field(default="http")
     host: str
-    model_name: Optional[str]
-    model_version: str = "1"
-    num_classes: int = 0
-    batch_size: int = 1
-    scaling: Optional[str] = None
+    model_name: Optional[str] = Field(default=None)
+    model_version: str = Field(default="1")
+    num_classes: int = Field(default=0)
+    batch_size: int = Field(default=1)
+    scaling: Optional[str] = Field(default=None)
 
     model_config = ConfigDict(protected_namespaces=())
 

@@ -70,7 +70,7 @@ class CpuInfo(BaseModel):
     l1_instruction_cache_size: int
     l2_cache_size: int
     l3_cache_size: int
-    model: int
+    model: Optional[int]
     flags: List[str]
 
 

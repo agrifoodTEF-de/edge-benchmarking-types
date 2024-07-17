@@ -127,7 +127,7 @@ class GPUFreq(BaseModel):
     cur: int
     max: int
     min: int
-    GPC: List[int]
+    GPC: Optional[List[int]] = Field(default=None)
 
 
 class GPU(BaseModel):

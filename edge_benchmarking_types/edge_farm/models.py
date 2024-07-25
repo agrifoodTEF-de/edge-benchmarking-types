@@ -6,7 +6,7 @@ from edge_benchmarking_types.edge_device.enums import InferenceServerType
 class BenchmarkData(BaseModel):
     bucket_name: str
     dataset: List[str]
-    labels: str
+    labels: Optional[str] = Field(default=None)
     model: str
     model_metadata: str
     model_repository: str

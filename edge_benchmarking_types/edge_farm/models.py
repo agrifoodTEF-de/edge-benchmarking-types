@@ -35,6 +35,5 @@ class TritonInferenceClientConfig(InferenceClientConfig):
 
 
 class BenchmarkConfig(BaseModel):
-    inference_server_type: InferenceServerType
     edge_device: EdgeDeviceConfig
     inference_client: Union[TritonInferenceClientConfig]

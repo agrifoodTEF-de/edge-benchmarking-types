@@ -9,10 +9,10 @@ packages = [{ include = "edge_benchmarking_types" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pydantic = "2.8.2"
+pydantic = "^2.8"
 
 [tool.poetry.group.dev.dependencies]
-black = "24.4.2"
+black = "^24.4"
 
 [build-system]
 requires = ["poetry-core"]

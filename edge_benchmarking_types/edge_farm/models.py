@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Union
 from pydantic import BaseModel, Field, ConfigDict
 from edge_benchmarking_types.edge_device.enums import InferenceServerType
 
@@ -37,4 +37,4 @@ class TritonInferenceClientConfig(InferenceClientConfig):
 class BenchmarkConfig(BaseModel):
     inference_server_type: InferenceServerType
     edge_device: EdgeDeviceConfig
-    inference_client: InferenceClientConfig
+    inference_client: Union[TritonInferenceClientConfig]

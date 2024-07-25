@@ -22,6 +22,9 @@ class EdgeDeviceConfig(BaseModel):
 class InferenceClientConfig(BaseModel):
     protocol: str = Field(default="http")
     host: str
+
+
+class TritonInferenceClientConfig(InferenceClientConfig):
     model_name: Optional[str] = Field(default=None)
     model_version: str = Field(default="1")
     num_classes: int = Field(default=0)

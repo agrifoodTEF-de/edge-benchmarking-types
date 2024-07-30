@@ -10,3 +10,8 @@ class JobStatus(str, Enum):
 
 class InferenceServerType(str, Enum):
     TRITON = "triton"
+
+
+class ContainerAction(str, Enum):
+    REMOVE = "remove"
+    CREATE = "create"

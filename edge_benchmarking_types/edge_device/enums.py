@@ -14,4 +14,4 @@ class InferenceServerType(str, Enum):
 
 class ContainerAction(str, Enum):
     REMOVE = "remove"
-    CREATE = "create"
+    START = "start"

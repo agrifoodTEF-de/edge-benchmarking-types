@@ -1,6 +1,5 @@
 from typing import Optional, List, Union
 from pydantic import BaseModel, Field, ConfigDict
-from edge_benchmarking_types.edge_device.enums import InferenceServerType
 
 
 class BenchmarkData(BaseModel):

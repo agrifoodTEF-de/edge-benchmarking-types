@@ -8,7 +8,7 @@ class BenchmarkData(BaseModel):
     dataset: List[str]
     labels: Optional[str] = Field(default=None)
     model: str
-    model_metadata: str
+    model_metadata: Optional[str] = Field(default=None)
     model_repository: str
 
     model_config = ConfigDict(protected_namespaces=())

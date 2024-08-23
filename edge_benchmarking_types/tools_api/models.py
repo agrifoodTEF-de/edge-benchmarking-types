@@ -13,7 +13,8 @@ class PytorchToOnnxConversionConfig(BaseModel):
     input_shapes: List[List[int]]
     input_types: List[OnnxModelInputType]
     output_names: Optional[List[str]] = Field(default=None)
-    verbose: bool = False
+    verbose: bool = Field(default=False)
+    optimize: bool = Field(default=False)
     training: OnnxExportMode = Field(default=OnnxExportMode.EVAL)
     operator_export_type: OnnxOperatorExportType = Field(
         default=OnnxOperatorExportType.ONNX

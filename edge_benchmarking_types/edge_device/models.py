@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List, Dict, Any, Tuple
-from pydantic import BaseModel, Field, field_serializer
+from pydantic import BaseModel, Field, field_serializer, field_validator
 from edge_benchmarking_types.edge_device.enums import JobStatus
 
 
@@ -72,6 +72,14 @@ class CpuInfo(BaseModel):
     l3_cache_size: Optional[int] = Field(default=None)
     model: Optional[int] = Field(default=None)
     flags: List[str]
+
+    @field_validator("l2_cache_size", mode="before")
+    @classmethod
+    def convert_str_to_bytes(cls, v: str) -> int:
+        if isinstance(v, str) and "MiB" in v:
+            v = v.replace("MiB", "").replace(",", ".").strip()
+            return round(float(v) * 1024**2)
+        return v
 
 
 class DiskUsage(BaseModel):

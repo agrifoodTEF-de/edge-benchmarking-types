@@ -69,7 +69,7 @@ class CpuInfo(BaseModel):
     l1_data_cache_size: int
     l1_instruction_cache_size: int
     l2_cache_size: int
-    l3_cache_size: int
+    l3_cache_size: Optional[int] = Field(default=None)
     model: Optional[int] = Field(default=None)
     flags: List[str]
 

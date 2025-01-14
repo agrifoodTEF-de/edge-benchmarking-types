@@ -16,6 +16,7 @@ class BenchmarkData(BaseModel):
 class EdgeDeviceConfig(BaseModel):
     protocol: str = Field(default="http")
     host: str
+    port: Optional[int] = Field(default=None)
 
 
 class InferenceClientConfig(BaseModel):

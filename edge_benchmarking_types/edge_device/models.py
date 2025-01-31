@@ -11,6 +11,11 @@ class BenchmarkJob(BaseModel):
     status: JobStatus
 
 
+class BenchmarkJobError(BaseModel):
+    message: str
+    traceback: str
+
+
 class InferenceServerStatus(BaseModel):
     ready: bool
 

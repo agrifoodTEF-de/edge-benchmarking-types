@@ -29,11 +29,23 @@ class InferenceClientConfig(BaseModel):
 class TritonInferenceClientConfig(InferenceClientConfig):
     model_name: Optional[str] = Field(default=None)
     model_version: str = Field(default="1")
-    num_classes: int = Field(default=0)
     batch_size: int = Field(default=1)
-    scaling: Optional[str] = Field(default=None)
 
     model_config = ConfigDict(protected_namespaces=())
+
+
+class TritonDenseNetClientConfig(TritonInferenceClientConfig):
+    num_classes: int = Field(default=0)
+    scaling: Optional[str] = Field(default=None)
+
+
+class TritonYoloClientConfig(TritonInferenceClientConfig):
+    num_classes: int = Field(default=0)
+    scaling: Optional[str] = Field(default=None)
+    confidence_thres: float = Field(default=0.2, ge=0, le=1)
+    iou_thres: float = Field(default=0.2, ge=0, le=1)
+    input_width: int
+    input_height: int
 
 
 class BenchmarkConfig(BaseModel):

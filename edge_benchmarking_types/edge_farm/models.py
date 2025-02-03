@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Union
 from pydantic import BaseModel, Field, ConfigDict
 
 
@@ -48,4 +48,4 @@ class TritonYoloClient(TritonInferenceClient):
 
 class BenchmarkConfig(BaseModel):
     edge_device: EdgeDevice
-    inference_client: InferenceClient
+    inference_client: Union[TritonDenseNetClient, TritonYoloClient]

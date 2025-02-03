@@ -1,6 +1,5 @@
-from typing import Optional, List, Union
+from typing import Optional, List
 from pydantic import BaseModel, Field, ConfigDict
-from edge_benchmarking_types.edge_farm.enums import InferenceClientType
 
 
 class BenchmarkData(BaseModel):

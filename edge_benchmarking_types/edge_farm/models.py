@@ -47,7 +47,11 @@ class TritonYoloClientConfig(TritonInferenceClientConfig):
     input_height: int
 
 
+class InferenceClient(BaseModel):
+    config: InferenceClientConfig
+    type: InferenceClientType
+
+
 class BenchmarkConfig(BaseModel):
     edge_device: EdgeDeviceConfig
-    inference_client: Union[TritonInferenceClientConfig]
-    inference_client_type: InferenceClientType
+    inference_client: InferenceClient

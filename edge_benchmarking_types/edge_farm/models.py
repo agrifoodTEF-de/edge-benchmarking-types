@@ -1,5 +1,6 @@
 from typing import Optional, List, Union
 from pydantic import BaseModel, Field, ConfigDict
+from edge_benchmarking_types.edge_farm.enums import InferenceClientType
 
 
 class BenchmarkData(BaseModel):
@@ -20,6 +21,7 @@ class EdgeDeviceConfig(BaseModel):
 
 
 class InferenceClientConfig(BaseModel):
+    type: InferenceClientType
     protocol: str = Field(default="http")
     host: str
 

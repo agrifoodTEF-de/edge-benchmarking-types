@@ -21,7 +21,6 @@ class EdgeDeviceConfig(BaseModel):
 
 
 class InferenceClientConfig(BaseModel):
-    type: InferenceClientType
     protocol: str = Field(default="http")
     host: str
 
@@ -51,3 +50,4 @@ class TritonYoloClientConfig(TritonInferenceClientConfig):
 class BenchmarkConfig(BaseModel):
     edge_device: EdgeDeviceConfig
     inference_client: Union[TritonInferenceClientConfig]
+    inference_client_type: InferenceClientType

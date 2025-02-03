@@ -13,7 +13,7 @@ class BenchmarkData(BaseModel):
     model_config = ConfigDict(protected_namespaces=())
 
 
-class EdgeDeviceConfig(BaseModel):
+class EdgeDevice(BaseModel):
     protocol: str = Field(default="http")
     host: str
     port: Optional[int] = Field(default=None)
@@ -47,5 +47,5 @@ class TritonYoloClient(TritonInferenceClient):
 
 
 class BenchmarkConfig(BaseModel):
-    edge_device: EdgeDeviceConfig
+    edge_device: EdgeDevice
     inference_client: InferenceClient

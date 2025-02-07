@@ -2,15 +2,17 @@ from typing import Optional, List, Union
 from pydantic import BaseModel, Field, ConfigDict
 
 
+class BenchmarkModel(BaseModel):
+    name: str
+    repository: str
+    metadata: Optional[str] = Field(default=None)
+    labels: Optional[str] = Field(default=None)
+
+
 class BenchmarkData(BaseModel):
     bucket_name: str
-    dataset: List[str]
-    labels: Optional[str] = Field(default=None)
-    model: str
-    model_metadata: Optional[str] = Field(default=None)
-    model_repository: str
-
-    model_config = ConfigDict(protected_namespaces=())
+    model: Optional[BenchmarkModel]
+    dataset: Optional[List[str]] = Field(default=[])
 
 
 class EdgeDevice(BaseModel):

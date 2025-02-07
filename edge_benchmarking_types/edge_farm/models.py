@@ -11,8 +11,8 @@ class BenchmarkModel(BaseModel):
 
 class BenchmarkData(BaseModel):
     bucket_name: str
-    model: Optional[BenchmarkModel] = Field(default=None)
-    dataset: Optional[List[str]] = Field(default=[])
+    model: BenchmarkModel
+    dataset: List[str]
 
 
 class EdgeDevice(BaseModel):

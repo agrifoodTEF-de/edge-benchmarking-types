@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Optional, List, Dict, Any, Tuple
+from typing import Optional, List, Dict, Tuple
 from edge_benchmarking_types.edge_device.enums import JobStatus
+from edge_benchmarking_types.edge_farm.models import BenchmarkInferResult
 from pydantic import BaseModel, Field, field_serializer, field_validator
 
 
@@ -12,7 +13,7 @@ class BenchmarkJobError(BaseModel):
 class BenchmarkJob(BaseModel):
     id: str
     benchmark_results: Dict[str, List]
-    inference_results: Optional[Dict[str, List[Any]]] = Field(default=None)
+    inference_results: Optional[BenchmarkInferResult] = Field(default=None)
     status: JobStatus
     error: Optional[BenchmarkJobError] = Field(default=None)
 

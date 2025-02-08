@@ -1,16 +1,21 @@
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Any, Dict
 from pydantic import BaseModel, Field, ConfigDict
 
 
 class InferLatency(BaseModel):
     average: float
-    percentiles: dict[int, float]
+    percentiles: Dict[int, float]
 
 
 class InferPerformanceResult(BaseModel):
     latency: InferLatency
     throughput: float
     samples_per_second: float
+
+
+class BenchmarkInferResult(BaseModel):
+    performance: InferPerformanceResult
+    inference: Dict[str, Any]
 
 
 class BenchmarkModel(BaseModel):

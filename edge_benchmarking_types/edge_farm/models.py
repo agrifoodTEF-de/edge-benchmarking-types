@@ -1,5 +1,5 @@
 from typing import Optional, List, Union, Any, Dict
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
 class InferLatency(BaseModel):
@@ -40,6 +40,14 @@ class EdgeDevice(BaseModel):
 class InferenceClient(BaseModel):
     protocol: str = Field(default="http")
     host: str
+    num_workers: int = Field(default=1)
+
+    @field_validator("num_workers")
+    @classmethod
+    def check_num_workers_nonzero(cls, v: int) -> int:
+        if v == 0:
+            raise ValueError("Field num_workers cannot be zero.")
+        return v
 
 
 class TritonInferenceClient(InferenceClient):

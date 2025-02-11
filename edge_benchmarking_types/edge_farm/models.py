@@ -72,6 +72,10 @@ class TritonYoloClient(TritonInferenceClient):
     input_height: int
 
 
+class TritonDummyClient(TritonInferenceClient):
+    pass
+
+
 class BenchmarkConfig(BaseModel):
     edge_device: EdgeDevice
     inference_client: Union[TritonDenseNetClient, TritonYoloClient]

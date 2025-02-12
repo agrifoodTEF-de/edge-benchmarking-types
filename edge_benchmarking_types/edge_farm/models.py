@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, ConfigDict, field_validator
 class DatasetSample(BaseModel):
     filename: str
     content_type: str | None
-    data: bytes
+    data: Any
 
 
 class InferLatency(BaseModel):

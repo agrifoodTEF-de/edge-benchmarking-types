@@ -13,14 +13,14 @@ class PerformanceResult(BaseModel):
     latency: Latency
 
 
-class InferenceClientPerformance(BaseModel):
+class InferPerformance(BaseModel):
     preprocess: PerformanceResult
     inference: PerformanceResult
     postprocess: PerformanceResult
 
 
 class BenchmarkInferResult(BaseModel):
-    performance: InferenceClientPerformance
+    performance: InferPerformance
     results: Dict[str, Any]
 
 

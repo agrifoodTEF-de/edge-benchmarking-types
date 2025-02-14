@@ -2,26 +2,32 @@ from typing import Optional, List, Union, Any, Dict
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
-class DatasetSample(BaseModel):
-    filename: str
-    content_type: Optional[str] = Field(default=None)
-    data: Any
-
-
-class InferLatency(BaseModel):
+class Latency(BaseModel):
     average: float
     percentiles: Dict[int, float]
 
 
-class InferPerformanceResult(BaseModel):
-    latency: InferLatency
-    throughput: float
+class PerformanceResult(BaseModel):
+    total_time: float
     samples_per_second: float
+    latency: Latency
+
+
+class InferenceClientPerformance(BaseModel):
+    preprocess: PerformanceResult
+    inference: PerformanceResult
+    postprocess: PerformanceResult
 
 
 class BenchmarkInferResult(BaseModel):
-    performance: InferPerformanceResult
-    inference: Dict[str, Any]
+    performance: InferenceClientPerformance
+    results: Dict[str, Any]
+
+
+class DatasetSample(BaseModel):
+    filename: str
+    content_type: Optional[str] = Field(default=None)
+    data: Any
 
 
 class BenchmarkModel(BaseModel):

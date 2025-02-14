@@ -1,5 +1,12 @@
 from typing import Optional, List, Union, Any, Dict
+from tritonclient.http import InferInput, InferRequestedOutput
 from pydantic import BaseModel, Field, ConfigDict, field_validator
+
+
+class TritonInferenceRequest:
+    filenames: list[str]
+    inputs: list[InferInput]
+    outputs: list[InferRequestedOutput]
 
 
 class DatasetSample(BaseModel):

@@ -9,6 +9,7 @@ class Latency(BaseModel):
 
 class PerformanceResult(BaseModel):
     total_time: float
+    sample_count: int
     samples_per_second: float
     latency: Latency
 

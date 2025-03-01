@@ -63,6 +63,13 @@ class InferenceClient(BaseModel):
             raise ValueError("Field num_workers cannot be zero.")
         return v
 
+    @field_validator("samples_per_second")
+    @classmethod
+    def check_samples_per_second_positive(cls, v: Optional[float]) -> Optional[float]:
+        if v is not None and v <= 0:
+            raise ValueError("Field samples_per_second has to be positive.")
+        return v
+
 
 class TritonInferenceClient(InferenceClient):
     model_name: Optional[str] = Field(default=None)

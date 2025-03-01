@@ -54,6 +54,7 @@ class InferenceClient(BaseModel):
     protocol: str = Field(default="http")
     host: str
     num_workers: int = Field(default=1)
+    samples_per_second: Optional[float] = Field(default=None)
 
     @field_validator("num_workers")
     @classmethod

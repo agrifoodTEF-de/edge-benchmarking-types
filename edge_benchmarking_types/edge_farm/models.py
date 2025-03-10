@@ -76,7 +76,7 @@ class TritonInferenceClient(InferenceClient):
     model_name: Optional[str] = Field(default=None)
     model_version: str = Field(default="1")
     batch_size: int = Field(default=1)
-
+    warm_up: bool = Field(default=False)
     model_config = ConfigDict(protected_namespaces=())
 
 
@@ -92,7 +92,6 @@ class TritonYoloClient(TritonInferenceClient):
     iou_thres: float = Field(default=0.2, ge=0, le=1)
     input_width: int
     input_height: int
-
 
 class BenchmarkConfig(BaseModel):
     edge_device: EdgeDevice

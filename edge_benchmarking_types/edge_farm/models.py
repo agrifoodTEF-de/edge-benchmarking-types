@@ -18,6 +18,7 @@ class InferPerformance(BaseModel):
     preprocess: PerformanceResult
     inference: PerformanceResult
     postprocess: PerformanceResult
+    warmup: Optional[float] = Field(default=None)
 
 
 class BenchmarkInferResult(BaseModel):

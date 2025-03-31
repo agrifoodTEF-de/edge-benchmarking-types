@@ -54,6 +54,7 @@ class EdgeDevice(BaseModel):
 class InferenceClient(BaseModel):
     protocol: str = Field(default="http")
     host: str
+    port: Optional[int] = Field(default=None)
     num_workers: int = Field(default=1)
     samples_per_second: Optional[float] = Field(default=None)
 
@@ -92,6 +93,7 @@ class TritonYoloClient(TritonInferenceClient):
     iou_thres: float = Field(default=0.2, ge=0, le=1)
     input_width: int
     input_height: int
+
 
 class BenchmarkConfig(BaseModel):
     edge_device: EdgeDevice

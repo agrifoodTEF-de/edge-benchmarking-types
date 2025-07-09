@@ -1,5 +1,6 @@
 from typing import Optional, List, Union, Any, Dict
 from pydantic import BaseModel, Field, ConfigDict, field_validator
+from edge_benchmarking_types.edge_farm.enums import OakImageResolution
 
 
 class Latency(BaseModel):
@@ -49,6 +50,31 @@ class EdgeDevice(BaseModel):
     protocol: str = Field(default="http")
     host: str
     port: Optional[int] = Field(default=None)
+
+
+class S3DataProvider(BaseModel):
+    bucket_name: str
+    prefix: Optional[str] = Field(default=None)
+
+
+class LocalDataProvider(BaseModel):
+    path: str
+
+
+class StreamingDataProvider(BaseModel):
+    max_sample_size: int
+
+
+class OakDataProvider(StreamingDataProvider):
+    ip: str
+    rgb_resolution: OakImageResolution
+    rgb_queue_size: int = Field(default=1, ge=1)
+
+
+class WebcamDataProvider(StreamingDataProvider):
+    ip: str
+    port: int
+    timeout: int = Field(default=3)
 
 
 class InferenceClient(BaseModel):

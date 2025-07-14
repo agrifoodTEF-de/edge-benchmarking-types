@@ -61,20 +61,21 @@ class LocalDataProvider(BaseModel):
     path: str
 
 
-class StreamingDataProvider(BaseModel):
-    max_sample_size: int = Field(ge=1)
-
-
-class OakDataProvider(StreamingDataProvider):
+class OakDataProvider(BaseModel):
     ip: str
     rgb_resolution: OakImageResolution
     rgb_queue_size: int = Field(default=1, ge=1)
 
 
-class WebcamDataProvider(StreamingDataProvider):
+class WebcamDataProvider(BaseModel):
     ip: str
     port: int
     timeout: int = Field(default=3)
+
+
+class ExternalDataProvider(BaseModel):
+    client: Union[OakDataProvider, WebcamDataProvider]
+    max_sample_size: int = Field(ge=1)
 
 
 class InferenceClient(BaseModel):

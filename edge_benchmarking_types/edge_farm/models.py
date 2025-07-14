@@ -33,7 +33,7 @@ class BenchmarkInferResult(BaseModel):
 class DatasetSample(BaseModel):
     filename: str
     content_type: Optional[str] = Field(default=None)
-    data: Any
+    data: bytes
 
 
 class BenchmarkModel(BaseModel):

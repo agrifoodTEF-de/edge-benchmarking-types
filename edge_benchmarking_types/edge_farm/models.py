@@ -1,6 +1,9 @@
 from typing import Optional, List, Union, Any, Dict
 from pydantic import BaseModel, Field, ConfigDict, field_validator
-from edge_benchmarking_types.edge_farm.enums import OakImageResolution
+from edge_benchmarking_types.edge_farm.enums import (
+    OakImageResolution,
+    WebcamImageFormat,
+)
 
 
 class Latency(BaseModel):
@@ -61,20 +64,22 @@ class LocalDataProvider(BaseModel):
     path: str
 
 
-class OakDataProvider(BaseModel):
+class OakClient(BaseModel):
     ip: str
     rgb_resolution: OakImageResolution
     rgb_queue_size: int = Field(default=1, ge=1)
+    warmup: int = Field(default=3, ge=1)
 
 
-class WebcamDataProvider(BaseModel):
+class WebcamClient(BaseModel):
     ip: str
     port: int
     timeout: int = Field(default=3)
+    img_format: WebcamImageFormat = Field(default=WebcamImageFormat.RAW)
 
 
 class ExternalDataProvider(BaseModel):
-    client: Union[OakDataProvider, WebcamDataProvider]
+    client: Union[OakClient, WebcamClient]
     max_sample_size: int = Field(ge=1)
 
 

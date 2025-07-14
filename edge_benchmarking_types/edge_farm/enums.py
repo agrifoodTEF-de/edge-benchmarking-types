@@ -9,3 +9,5 @@ class OakImageResolution(str, Enum):
 
 class WebcamImageFormat(str, Enum):
     JPEG = "jpeg"
+    PNG = "png"
+    RAW = "raw"

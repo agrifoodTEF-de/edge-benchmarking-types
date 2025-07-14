@@ -7,5 +7,5 @@ class OakImageResolution(str, Enum):
     THE_720P = "720p"
 
 
-class WebcamImageFormats(str, Enum):
+class WebcamImageFormat(str, Enum):
     JPEG = "jpeg"

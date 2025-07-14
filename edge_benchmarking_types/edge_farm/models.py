@@ -62,7 +62,7 @@ class LocalDataProvider(BaseModel):
 
 
 class StreamingDataProvider(BaseModel):
-    max_sample_size: int
+    max_sample_size: int = Field(ge=1)
 
 
 class OakDataProvider(StreamingDataProvider):

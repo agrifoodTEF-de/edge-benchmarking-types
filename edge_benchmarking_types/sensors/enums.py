@@ -11,3 +11,12 @@ class WebcamImageFormat(str, Enum):
     JPEG = "jpeg"
     PNG = "png"
     RAW = "raw"
+
+
+class SensorType(str, Enum):
+    CAMERA = "camera"
+
+
+class SensorClientType(str, Enum):
+    OAK_CLIENT = "OakClient"
+    WEBCAM_CLIENT = "WebcamClient"

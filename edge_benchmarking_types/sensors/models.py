@@ -2,8 +2,10 @@ from typing import Union
 from pydantic import BaseModel, Field
 
 from edge_benchmarking_types.sensors.enums import (
-    OakImageResolution,
+    SensorType,
+    SensorClientType,
     WebcamImageFormat,
+    OakImageResolution,
 )
 
 
@@ -26,3 +28,14 @@ class WebcamClient(SensorClient):
 class Sensor(BaseModel):
     client: Union[OakClient, WebcamClient]
     max_sample_size: int = Field(ge=1)
+
+
+class SensorInfo(BaseModel):
+    type: SensorType
+    name: str
+    manufacturer: str
+    model: str
+    serial: str
+    hostname: str
+    ip: str
+    client: SensorClientType

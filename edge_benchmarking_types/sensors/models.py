@@ -1,5 +1,5 @@
 from typing import Union
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from edge_benchmarking_types.sensors.enums import (
     SensorType,
@@ -31,6 +31,8 @@ class Sensor(BaseModel):
 
 
 class SensorInfo(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
+
     type: SensorType
     name: str
     manufacturer: str

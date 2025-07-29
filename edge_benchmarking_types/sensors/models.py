@@ -3,30 +3,25 @@ from pydantic import BaseModel, Field, ConfigDict
 
 from edge_benchmarking_types.sensors.enums import (
     SensorType,
-    SensorClientType,
     WebcamImageFormat,
     OakImageResolution,
 )
 
 
-class SensorClient(BaseModel):
-    ip: str
-
-
-class OakClient(SensorClient):
+class OakClientConfig(BaseModel):
     rgb_resolution: OakImageResolution
     rgb_queue_size: int = Field(default=1, ge=1)
     warmup: int = Field(default=3, ge=1)
 
 
-class WebcamClient(SensorClient):
-    port: int
+class WebcamClientConfig(BaseModel):
+    port: int = Field(ge=1, le=65535)
     timeout: int = Field(default=3)
     img_format: WebcamImageFormat = Field(default=WebcamImageFormat.RAW)
 
 
 class Sensor(BaseModel):
-    client: Union[OakClient, WebcamClient]
+    client_config: Union[OakClientConfig, WebcamClientConfig]
     max_sample_size: int = Field(ge=1)
 
 
@@ -40,4 +35,3 @@ class SensorInfo(BaseModel):
     serial: str
     hostname: str
     ip: str
-    client: SensorClientType

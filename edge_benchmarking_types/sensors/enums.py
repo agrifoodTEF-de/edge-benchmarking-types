@@ -15,8 +15,3 @@ class WebcamImageFormat(str, Enum):
 
 class SensorType(str, Enum):
     CAMERA = "camera"
-
-
-class SensorClientType(str, Enum):
-    OAK_CLIENT = "OakClient"
-    WEBCAM_CLIENT = "WebcamClient"

@@ -20,7 +20,7 @@ class WebcamClientConfig(BaseModel):
     img_format: WebcamImageFormat = Field(default=WebcamImageFormat.RAW)
 
 
-class Sensor(BaseModel):
+class SensorConfig(BaseModel):
     client_config: Union[OakClientConfig, WebcamClientConfig]
     max_sample_size: int = Field(ge=1)
 

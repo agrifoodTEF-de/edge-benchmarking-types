@@ -29,7 +29,7 @@ class SensorConfig(BaseModel):
 class SensorStatus(BaseModel):
     online: bool
     last_seen: datetime
-    latency: float
+    rtt: float
     timestamp: datetime = Field(default_factory=datetime.now)
 
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Union, Optional
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -25,6 +26,13 @@ class SensorConfig(BaseModel):
     max_sample_size: int = Field(ge=1)
 
 
+class SensorStatus(BaseModel):
+    online: bool
+    last_seen: datetime
+    latency: float
+    timestamp: datetime = Field(default_factory=datetime.now)
+
+
 class SensorInfo(BaseModel):
     model_config = ConfigDict(use_enum_values=True)
 
@@ -35,4 +43,4 @@ class SensorInfo(BaseModel):
     serial: str
     hostname: str
     ip: str
-    online: Optional[bool] = Field(default=False)
+    status: Optional[SensorStatus] = Field(default=None)

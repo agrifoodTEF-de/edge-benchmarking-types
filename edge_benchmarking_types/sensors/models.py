@@ -28,8 +28,8 @@ class SensorConfig(BaseModel):
 
 class SensorStatus(BaseModel):
     online: bool
-    last_seen: Optional[datetime]
-    rtt: Optional[float]
+    last_seen: Optional[datetime] = Field(default=None)
+    rtt: Optional[float] = Field(default=None)
     timestamp: datetime = Field(default_factory=datetime.now)
 
 

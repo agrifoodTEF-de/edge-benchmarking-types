@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from pydantic import BaseModel, Field, ConfigDict
 
 from edge_benchmarking_types.sensors.enums import (
@@ -35,3 +35,4 @@ class SensorInfo(BaseModel):
     serial: str
     hostname: str
     ip: str
+    online: Optional[bool] = Field(default=False)

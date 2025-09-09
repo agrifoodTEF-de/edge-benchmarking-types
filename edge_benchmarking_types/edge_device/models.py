@@ -158,7 +158,7 @@ class GPU(BaseModel):
 class DeviceHeader(BaseModel):
     ip: IPv4Address
     name: str
-    hostname: str = Field(..., pattern=HOSTNAME_REGEX.pattern)
+    hostname: str = Field(..., pattern=HOSTNAME_REGEX, max_length=253)
     heartbeat_interval: int
     timestamp: datetime = Field(default_factory=datetime.now)
     online: bool = Field(default=True)

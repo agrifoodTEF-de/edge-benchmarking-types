@@ -48,7 +48,7 @@ class BenchmarkData(BaseModel):
 
 class EdgeDevice(BaseModel):
     protocol: str = Field(default="http")
-    host: str = Field(..., pattern=HOSTNAME_REGEX.pattern)
+    host: str = Field(..., pattern=HOSTNAME_REGEX, max_length=253)
     port: Optional[int] = Field(default=None, ge=1, le=65535)
 
 

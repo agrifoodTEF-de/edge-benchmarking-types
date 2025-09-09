@@ -43,6 +43,6 @@ class SensorInfo(BaseModel):
     manufacturer: str
     model: str
     serial: str
-    hostname: str = Field(..., pattern=HOSTNAME_REGEX.pattern)
+    hostname: str = Field(..., pattern=HOSTNAME_REGEX, max_length=253)
     ip: IPv4Address
     status: Optional[SensorStatus] = Field(default=None)

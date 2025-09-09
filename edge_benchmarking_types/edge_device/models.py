@@ -1,5 +1,7 @@
 from datetime import datetime
+from pydantic.networks import IPv4Address
 from typing import Optional, List, Dict, Tuple
+from edge_benchmarking_types.patterns import HOSTNAME_REGEX
 from edge_benchmarking_types.edge_device.enums import JobStatus
 from edge_benchmarking_types.edge_farm.models import BenchmarkInferResult
 from pydantic import BaseModel, Field, field_serializer, field_validator
@@ -154,9 +156,9 @@ class GPU(BaseModel):
 
 
 class DeviceHeader(BaseModel):
-    ip: str
+    ip: IPv4Address
     name: str
-    hostname: str
+    hostname: str = Field(..., pattern=HOSTNAME_REGEX.pattern)
     heartbeat_interval: int
     timestamp: datetime = Field(default_factory=datetime.now)
     online: bool = Field(default=True)

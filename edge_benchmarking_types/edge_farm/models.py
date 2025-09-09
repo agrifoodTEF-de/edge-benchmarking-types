@@ -1,4 +1,5 @@
 from typing import Optional, List, Union, Any, Dict
+from edge_benchmarking_types.patterns import HOSTNAME_REGEX
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
@@ -47,8 +48,8 @@ class BenchmarkData(BaseModel):
 
 class EdgeDevice(BaseModel):
     protocol: str = Field(default="http")
-    host: str
-    port: Optional[int] = Field(default=None)
+    host: str = Field(..., pattern=HOSTNAME_REGEX.pattern)
+    port: Optional[int] = Field(default=None, ge=1, le=65535)
 
 
 class S3DataProvider(BaseModel):
@@ -63,7 +64,7 @@ class LocalDataProvider(BaseModel):
 class InferenceClient(BaseModel):
     protocol: str = Field(default="http")
     host: str
-    port: Optional[int] = Field(default=None)
+    port: Optional[int] = Field(default=None, ge=1, le=65535)
     num_workers: int = Field(default=1)
     samples_per_second: Optional[float] = Field(default=None)
 

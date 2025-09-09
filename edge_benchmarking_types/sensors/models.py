@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Union, Optional
+from pydantic.networks import IPv4Address
 from pydantic import BaseModel, Field, ConfigDict
 
+from edge_benchmarking_types.patterns import HOSTNAME_REGEX
 from edge_benchmarking_types.sensors.enums import (
     SensorType,
     WebcamImageFormat,
@@ -41,6 +43,6 @@ class SensorInfo(BaseModel):
     manufacturer: str
     model: str
     serial: str
-    hostname: str
-    ip: str
+    hostname: str = Field(..., pattern=HOSTNAME_REGEX.pattern)
+    ip: IPv4Address
     status: Optional[SensorStatus] = Field(default=None)

@@ -25,6 +25,7 @@ class InferPerformance(BaseModel):
 class BenchmarkInferResult(BaseModel):
     performance: InferPerformance
     results: Dict[str, Any]
+    metrics: Optional[Dict[str, Any]] = Field(default=None)
 
 
 class DatasetSample(BaseModel):

@@ -1,5 +1,9 @@
 from typing import Optional, List, Union, Any, Dict
 from edge_benchmarking_types.patterns import HOSTNAME_REGEX
+from edge_benchmarking_types.edge_farm.enums import (
+    OptimizationFactor,
+    LatencyPercentile,
+)
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
@@ -110,3 +114,48 @@ class BenchmarkConfig(BaseModel):
     edge_device: EdgeDevice
     inference_client: Union[TritonDenseNetClient, TritonYoloClient]
     cpu_only: bool = Field(default=False)
+
+
+class DeviceCatalogEntry(BaseModel):
+    """Non-derivable, admin-maintained metadata for a class of edge device.
+
+    Keyed by the device's GPU model string (matched as a substring of
+    ``DeviceInfo.gpu[*].model``) or pinned per hostname. ``tier_rank`` orders
+    devices from smallest/cheapest (low) to largest/most capable (high) and is
+    used as a cost proxy / tie-breaker. ``cost_eur`` is the acquisition price in
+    euros. Costs are editable defaults — confirm against actual procurement.
+    """
+
+    gpu_model: str
+    tier_rank: int
+    cost_eur: Optional[float] = Field(default=None, ge=0)
+    power_envelope_watts: Optional[float] = Field(default=None, ge=0)
+
+
+class DeviceCandidateResult(BaseModel):
+    """Outcome for a single candidate device in a recommendation run."""
+
+    hostname: str
+    benchmark_job_id: Optional[str] = Field(default=None)
+    latency_ms: Optional[float] = Field(default=None)
+    energy_joules: Optional[float] = Field(default=None)
+    cost_eur: Optional[float] = Field(default=None)
+    tier_rank: Optional[int] = Field(default=None)
+    meets_constraint: bool = Field(default=False)
+    excluded_reason: Optional[str] = Field(default=None)
+
+
+class DeviceRecommendation(BaseModel):
+    """Result of an auto-search: the winning device plus the ranked candidates.
+
+    ``winner_hostname`` is ``None`` when no candidate satisfied the latency
+    constraint; ``candidates`` always lists every candidate (including excluded
+    ones, each carrying an ``excluded_reason``) so callers can explain the
+    outcome.
+    """
+
+    factor: OptimizationFactor
+    latency_metric: LatencyPercentile
+    latency_threshold_ms: float
+    winner_hostname: Optional[str] = Field(default=None)
+    candidates: List[DeviceCandidateResult] = Field(default_factory=list)

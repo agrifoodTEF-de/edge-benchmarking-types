@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, List, Union, Any, Dict
 from edge_benchmarking_types.patterns import HOSTNAME_REGEX
 from edge_benchmarking_types.edge_farm.enums import (
@@ -24,6 +25,15 @@ class InferPerformance(BaseModel):
     inference: PerformanceResult
     postprocess: PerformanceResult
     warmup: Optional[float] = Field(default=None)
+    # Wall-clock boundaries (manager clock — the inference client runs on the
+    # Edge-Farm manager, not the device). Optional/additive so old result JSON
+    # and un-bumped consumers keep deserializing.
+    run_started_at: Optional[datetime] = Field(default=None)
+    run_finished_at: Optional[datetime] = Field(default=None)
+    first_inference_started_at: Optional[datetime] = Field(default=None)
+    first_inference_finished_at: Optional[datetime] = Field(default=None)
+    warmup_started_at: Optional[datetime] = Field(default=None)
+    warmup_finished_at: Optional[datetime] = Field(default=None)
 
 
 class BenchmarkInferResult(BaseModel):

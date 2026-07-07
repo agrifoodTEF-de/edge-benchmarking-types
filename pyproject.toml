@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "edge-benchmarking-types"
-version = "0.2.0"
+version = "0.2.1"
 description = "Type definitions for AgrifoodTEF's Edge Benchmarking Service."
 authors = ["Andreas Schliebitz <a.schliebitz@hs-osnabrueck.de>"]
 license = "Apache-2.0"

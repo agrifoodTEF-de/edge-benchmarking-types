@@ -24,6 +24,10 @@ class InferPerformance(BaseModel):
     preprocess: PerformanceResult
     inference: PerformanceResult
     postprocess: PerformanceResult
+    # Time spent fetching/loading each batch's samples from the data provider
+    # (e.g. a SeaweedFS S3 GET) before preprocessing. Optional/additive so old
+    # result JSON and un-bumped consumers keep deserializing.
+    load: Optional[PerformanceResult] = Field(default=None)
     warmup: Optional[float] = Field(default=None)
     # Wall-clock boundaries (manager clock — the inference client runs on the
     # Edge-Farm manager, not the device). Optional/additive so old result JSON

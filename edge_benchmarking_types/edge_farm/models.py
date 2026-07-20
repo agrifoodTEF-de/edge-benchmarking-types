@@ -153,6 +153,7 @@ class DeviceCandidateResult(BaseModel):
     benchmark_job_id: Optional[str] = Field(default=None)
     latency_ms: Optional[float] = Field(default=None)
     energy_joules: Optional[float] = Field(default=None)
+    accuracy: Optional[float] = Field(default=None)
     cost_eur: Optional[float] = Field(default=None)
     tier_rank: Optional[int] = Field(default=None)
     meets_constraint: bool = Field(default=False)
@@ -171,5 +172,7 @@ class DeviceRecommendation(BaseModel):
     factor: OptimizationFactor
     latency_metric: LatencyPercentile
     latency_threshold_ms: float
+    min_accuracy: Optional[float] = Field(default=None)
+    accuracy_metric: str = Field(default="accuracy")
     winner_hostname: Optional[str] = Field(default=None)
     candidates: List[DeviceCandidateResult] = Field(default_factory=list)

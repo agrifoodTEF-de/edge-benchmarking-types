@@ -1,11 +1,17 @@
 from datetime import datetime
-from typing import Optional, List, Union, Any, Dict
+from typing import Optional, List, Literal, Union, Any, Dict
 from edge_benchmarking_types.patterns import HOSTNAME_REGEX
 from edge_benchmarking_types.edge_farm.enums import (
     OptimizationFactor,
     LatencyPercentile,
 )
-from pydantic import BaseModel, Field, ConfigDict, field_validator
+from pydantic import (
+    BaseModel,
+    Field,
+    ConfigDict,
+    field_validator,
+    model_validator,
+)
 
 
 class Latency(BaseModel):
@@ -111,11 +117,13 @@ class TritonInferenceClient(InferenceClient):
 
 
 class TritonDenseNetClient(TritonInferenceClient):
+    client_type: Literal["TritonDenseNetClient"] = "TritonDenseNetClient"
     num_classes: int = Field(default=0)
     scaling: Optional[str] = Field(default=None)
 
 
 class TritonYoloClient(TritonInferenceClient):
+    client_type: Literal["TritonYoloClient"] = "TritonYoloClient"
     num_classes: int = Field(default=0)
     scaling: Optional[str] = Field(default=None)
     confidence_thres: float = Field(default=0.2, ge=0, le=1)
@@ -124,10 +132,106 @@ class TritonYoloClient(TritonInferenceClient):
     input_height: int
 
 
+class TritonBirdNetClient(TritonInferenceClient):
+    """BirdNET (v3.0) acoustic classifier.
+
+    The model takes raw float32 waveform of shape ``(batch, sample_rate *
+    segment_seconds)`` -- the mel-spectrogram is baked into the ONNX graph -- and
+    returns per-species logits plus embeddings. All waveform preparation
+    (decode, mono-mix, resample, segment, pad) happens client-side; the defaults
+    below reproduce the reference ``birdnet`` pipeline for v3.0.
+
+    Note there is no ``num_classes``: BirdNET's top-k is applied client-side
+    after the flat sigmoid, not by Triton's ``class_count``.
+    """
+
+    client_type: Literal["TritonBirdNetClient"] = "TritonBirdNetClient"
+    top_k: int = Field(default=5, ge=1)
+    confidence_thres: float = Field(default=0.1, ge=0, le=1)
+    sample_rate: int = Field(default=32_000, gt=0)
+    segment_seconds: float = Field(default=3.0, gt=0)
+    overlap_seconds: float = Field(default=0.0, ge=0)
+    apply_sigmoid: bool = Field(default=True)
+    sigmoid_sensitivity: float = Field(default=1.0)
+    bandpass_fmin: Optional[int] = Field(default=None, ge=0)
+    bandpass_fmax: Optional[int] = Field(default=None, ge=0)
+    # Requested upper bound on rows in a single Triton request. One audio file
+    # expands to many segments, so an unbounded batch can reach hundreds of MB:
+    # 1000 segments x 96000 samples x 4 bytes is ~384 MB.
+    #
+    # This is an upper bound, not the effective value: the client clamps it to
+    # the model's max_batch_size at run time, because Triton *rejects* an
+    # oversized request rather than splitting it. Edge devices start Triton with
+    # --backend-config=default-max-batch-size=32, so an auto-completed model
+    # caps out at 32 segments (96s of audio) unless a config.pbtxt raises it.
+    max_segments_per_request: int = Field(default=256, ge=1)
+
+    @model_validator(mode="after")
+    def check_overlap_below_segment(self) -> "TritonBirdNetClient":
+        if self.overlap_seconds >= self.segment_seconds:
+            raise ValueError(
+                "Field overlap_seconds has to be smaller than segment_seconds."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_bandpass_range(self) -> "TritonBirdNetClient":
+        fmin, fmax = self.bandpass_fmin, self.bandpass_fmax
+        if fmin is not None and fmax is not None and fmin >= fmax:
+            raise ValueError(
+                "Field bandpass_fmin has to be smaller than bandpass_fmax."
+            )
+        return self
+
+
+# Tag -> model, used by the back-compat validator below. Order matters only for
+# readability; dispatch is by the discriminating field, not by position.
+AnyTritonInferenceClient = Union[
+    TritonDenseNetClient,
+    TritonYoloClient,
+    TritonBirdNetClient,
+]
+
+
 class BenchmarkConfig(BaseModel):
     edge_device: EdgeDevice
-    inference_client: Union[TritonDenseNetClient, TritonYoloClient]
+    inference_client: AnyTritonInferenceClient = Field(discriminator="client_type")
     cpu_only: bool = Field(default=False)
+
+    @model_validator(mode="before")
+    @classmethod
+    def infer_client_type(cls, data: Any) -> Any:
+        """Accept payloads from callers that predate ``client_type``.
+
+        Without a tag, a discriminated union rejects the payload outright
+        (``union_tag_not_found``). Producers pinned to an older version of this
+        package -- notably the Agri-Gaia frontend, which builds this dict by
+        hand -- would then have every DenseNet/YOLO job fail with a 422. Infer
+        the tag from the fields that are actually present instead.
+
+        Without a discriminator these unions mis-resolve silently: pydantic's
+        smart union validates a minimal BirdNET payload as a DenseNet client and
+        drops every BirdNET parameter without raising.
+        """
+        if not isinstance(data, dict):
+            return data
+
+        client = data.get("inference_client")
+        if not isinstance(client, dict) or "client_type" in client:
+            return data
+
+        if "input_width" in client or "input_height" in client:
+            client_type = "TritonYoloClient"
+        elif any(
+            key in client
+            for key in ("sample_rate", "segment_seconds", "top_k", "overlap_seconds")
+        ):
+            client_type = "TritonBirdNetClient"
+        else:
+            client_type = "TritonDenseNetClient"
+
+        # Copy rather than mutate: `data` may be a caller-owned dict.
+        return {**data, "inference_client": {**client, "client_type": client_type}}
 
 
 class DeviceCatalogEntry(BaseModel):
